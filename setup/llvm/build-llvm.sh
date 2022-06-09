@@ -1,5 +1,7 @@
-BUILD_ROOT="/home/parth/clubs/open-source/LLVM/builds/build-${1}"
-LLVM_ROOT="/home/parth/clubs/open-source/LLVM/llvm-project"
+BUILD_ROOT="/home/parth/clubs/open-source/LLVM/fork/builds/build-${1}"
+LLVM_ROOT="/home/parth/clubs/open-source/LLVM/fork/llvm-project"
+
+rm -rf "${BUILD_ROOT}/obj"
 
 if [ -d "${BUILD_ROOT}/obj" ]
 then

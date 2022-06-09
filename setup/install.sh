@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
+
+# zsh and oh-my-zsh should be set up before running this script.
+
 sudo apt-get update
 
-# install tmux, vim, neovim, ninja, cmake, pip, htop, unzip
-sudo apt-get -y install tmux vim neovim ninja-build cmake pip htop unzip
+# install tmux, vim, neovim, ninja, cmake, pip, htop, unzip, ncdu
+sudo apt-get -y install tmux vim neovim ninja-build cmake pip htop unzip ncdu
 
 # install fzf
 mkdir -p ~/Programs/
@@ -21,4 +24,3 @@ ninja install
 mkdir -p ~/Programs/bin
 cd ~/Programs/bin
 ln -s ~/Programs/ccache/inst/bin/ccache
-chmod u+x ccache
