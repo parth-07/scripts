@@ -3,7 +3,8 @@ import subprocess as sp
 import argparse
 from pathlib import Path
 
-BUILDS_ROOT= "/home/parth/clubs/open-source/clad/fork/builds"
+BUILDS_ROOT = "/home/parth/clubs/open-source/clad/fork/builds"
+
 
 def create_parser():
     parser = argparse.ArgumentParser(
@@ -13,7 +14,7 @@ def create_parser():
     parser.add_argument("--clang-ver", "-c", required=True,
                         type=int, help="Clang version to be used")
     parser.add_argument("--output", "-o", help="output file")
-
+    parser.add_argument("--enable-cuda", action="store_true")
     parser.add_argument(
         "--plugin-arg",
         nargs="+",
@@ -40,10 +41,12 @@ def create_parser():
     parser.add_argument("--run", action="store_true")
     return parser
 
+
 def basename_without_extension(file_path):
     file_name = file_path.name
     pos = file_name.rfind(".")
     return file_name[0:pos]
+
 
 def find_llvm_home(ver, build_llvm_if_not_present=False):
     llvm_home = Path('/usr/lib/llvm-{}/'.format(ver))
@@ -54,7 +57,8 @@ def find_llvm_home(ver, build_llvm_if_not_present=False):
 
 
 def find_clad_home(clang_ver, build_clad_if_not_present=False):
-    clad_home = Path('{builds_root}/build-{ver}'.format(builds_root = BUILDS_ROOT, ver = clang_ver))
+    clad_home = Path(
+        '{builds_root}/build-{ver}'.format(builds_root=BUILDS_ROOT, ver=clang_ver))
     if not (clad_home/'inst').exists() and build_clad_if_not_present:
         sp.run('build_clad.sh {ver}'.format(ver=clang_ver), shell=True)
     assert clad_home.exists(), "Clad home not found!"
@@ -116,15 +120,29 @@ def build_compile_command(args, additional_args=None):
     command.extend(
         [
             "-I" + str(args.clad_home / "include"),
-            "-x",
-            "c++",
             "-stdlib=" + args.stdlib,
             "-std=" + args.std,
             str(args.source),
-            "-o",
-            str(args.output),
-        ]
-    )
+            "-xc++"
+        ])
+    
+    if args.enable_cuda:
+        command.extend([
+            "--cuda-gpu-arch=sm_70",
+            "--cuda-path=/usr/local/cuda/",
+            "-L/usr/local/cuda/lib64",
+            "-lcudart_static",
+            "-ldl",
+            "-lrt",
+            "-pthread",
+            "-lm",
+            "-lstdc++"
+        ])
+
+    command.extend([
+        "-o",
+        str(args.output),
+    ])
 
     if additional_args:
         command.extend(additional_args)
@@ -135,6 +153,7 @@ def build_compile_command(args, additional_args=None):
             out = './' + out
         command.extend(["&&", out])
     return command
+
 
 if __name__ == "__main__":
     parser = create_parser()
