@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # zsh and oh-my-zsh should be set up before running this script.
 
 sudo apt-get update

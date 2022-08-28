@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+ROOT_DIR="$(dirname ${0})"
+CONFIG_DIR=ROOT_DIR/configurations
+. CONFIG_DIR/vars
+
+# configure tmux
+cp CONFIG_DIR/configurations/.tmux.conf ${HOME}/.tmux.conf
+
+# [interactive] locale configuration
+# sudo locale-gen "en_IN.UTF-8"
+# sudo dpkg-reconfigure locales
+
+# configure git
+git config --global user.email ${CONFIG_EMAIL}
+git config --global user.name ${CONFIG_NAME}
+git config --global core.editor ${CONFIG_EDITOR}
+git config --global credential.helper ${CONFIG_GIT_CREDENTIAL_HELPER}
+
+# configure nvim
+cp -r CONFIG_DIR/nvim "${HOME}/.config"
+
+# configure ccache
+cd ${CONFIG_PROGRAMS_DIR}
+ln -s ccache g++
+ln -s ccache gcc
+ln -s ccache clang-10
+ln -s ccache clang++-10
+ln -s ccache clang-11
+ln -s ccache clang++-11
+ln -s ccache clang-12
+ln -s ccache clang++-12
+ln -s ccache clang-13
+ln -s ccache clang++-13
+ln -s ccache clang-14
+ln -s ccache clang++-14
