@@ -40,6 +40,7 @@ def create_parser():
     )
 
     parser.add_argument("--run", action="store_true")
+    parser.add_argument("--pristine", action="store_true")
     return parser
 
 
@@ -164,6 +165,9 @@ def build_compile_command(args, additional_args=None):
 if __name__ == "__main__":
     parser = create_parser()
     known_args, additional_args = parser.parse_known_args()
+
+    if known_args.pristine:
+        BUILDS_ROOT = "/home/parth/clubs/open-source/clad/pristine/builds"
 
     preprocess_and_validate_args(known_args)
     command = build_compile_command(known_args, additional_args)
