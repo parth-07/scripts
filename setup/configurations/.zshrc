@@ -110,10 +110,14 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
 # zsh plugin configurations
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#7f8a81"
 
-function clip() {
-  tmux set-buffer -w "$($@)"
+function buftoclip() {
   if command -v xclip &> /dev/null
   then
-    echo "$(tmux paste-buffer)" | xclip -selection clipboard
+    tmux save-buffer - | xclip -selection clipboard
   fi
+}
+
+function clip() {
+  tmux set-buffer -w "$($@)"
+  buftoclip
 }

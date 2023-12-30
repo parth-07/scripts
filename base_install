@@ -18,7 +18,7 @@ cd ~/Programs/ccache
 git clone https://github.com/ccache/ccache.git src
 mkdir -p obj inst
 cd obj
-cmake -G Ninja ../src -DZSTD_FROM_INTERNET=On -DHIREDIS_FROM_INTERNET=On -DCMAKE_INSTALL_PREFIX=../inst
+cmake -G Ninja ../src -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../inst
 ninja install
 mkdir -p ~/Programs/bin
 cd ~/Programs/bin
